@@ -47,7 +47,7 @@ def process_row(row):
     url = data[-1].find('a').get('href')
 
     # google calendar doesn't use the url field so just throw it in here as well
-    details_str += '\n\n' + url.encode('iso-8859-1')
+    details_str += '\n\n' + url.encode('utf-8')
 
     return Concert(
         title=title,
