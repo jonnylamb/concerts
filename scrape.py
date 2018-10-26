@@ -34,7 +34,7 @@ def process_row(row):
     location = locations.get(location_code, location_code)
 
     details = data[1]
-    title = details.find('p').text
+    title = details.find('p').text.strip()
 
     date_cell = details.find(is_bottom)
     datetime_str = date_cell.find('time').get('datetime')
@@ -42,9 +42,9 @@ def process_row(row):
 
     details_str = '\n'.join([
         s.text.encode('utf-8') for s in details.findAll('p')[1:-1] if len(s.text) > 0
-    ])
+    ]).strip()
 
-    url = data[-1].find('a').get('href')
+    url = data[-1].find('a').get('href').strip()
 
     # google calendar doesn't use the url field so just throw it in here as well
     details_str += '\n\n' + url.encode('utf-8')
