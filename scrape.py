@@ -71,6 +71,6 @@ def find_concerts(soup):
 def fetch_concerts():
     r = requests.get('http://www.londonclassicalconcerts.co.uk/')
     r.encoding = 'utf-8'
-    soup = BeautifulSoup(r.text, features='lxml')
+    soup = BeautifulSoup(r.text)
 
     return find_concerts(soup)
