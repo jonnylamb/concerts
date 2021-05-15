@@ -3,6 +3,7 @@
 from bs4 import BeautifulSoup
 from collections import namedtuple
 from datetime import datetime
+import requests
 
 Concert = namedtuple('Concert', ['title', 'datetime', 'location', 'details', 'url'])
 
@@ -66,3 +67,10 @@ def find_concerts(soup):
     all_rows = soup.findAll(is_datarow)
 
     return map(process_row, all_rows)
+
+def fetch_concerts():
+    r = requests.get('http://www.londonclassicalconcerts.co.uk/')
+    r.encoding = 'utf-8'
+    soup = BeautifulSoup(r.text, features='lxml')
+
+    return find_concerts(soup)
