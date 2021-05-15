@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from bs4 import BeautifulSoup
 from collections import namedtuple
 from datetime import datetime
 
@@ -23,9 +24,6 @@ locations = {
     'WH': 'Wigmore Hall'
 }
 
-def is_bottom(tag):
-    return tag.name == 'p' and tag.get('class') == 'Bottom'
-
 def process_row(row):
     data = row.findAll('td')
 
@@ -36,18 +34,18 @@ def process_row(row):
     details = data[1]
     title = details.find('p').text.strip()
 
-    date_cell = details.find(is_bottom)
-    datetime_str = date_cell.find('time').get('datetime')
+    time_tag = details.find(lambda t: t.name == 'time')
+    datetime_str = time_tag.get('datetime')
     parsed_datetime = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M')
 
     details_str = '\n'.join([
-        s.text.encode('utf-8') for s in details.findAll('p')[1:-1] if len(s.text) > 0
+        s.text for s in details.findAll('p')[1:-1] if len(s.text) > 0
     ]).strip()
 
     url = data[-1].find('a').get('href').strip()
 
     # google calendar doesn't use the url field so just throw it in here as well
-    details_str += '\n\n' + url.encode('utf-8')
+    details_str += '\n\n' + url
 
     return Concert(
         title=title,

@@ -2,9 +2,9 @@
 
 from __future__ import print_function
 
+from bs4 import BeautifulSoup
 import icalendar
 import requests
-from BeautifulSoup import BeautifulSoup
 from datetime import timedelta
 
 from scrape import find_concerts
@@ -33,7 +33,7 @@ def make_ical(concerts):
 if __name__ == '__main__':
     r = requests.get('http://www.londonclassicalconcerts.co.uk/')
     r.encoding = 'utf-8'
-    soup = BeautifulSoup(r.text)
+    soup = BeautifulSoup(r.text, features='lxml')
 
     concerts = find_concerts(soup)
 
